@@ -27,7 +27,7 @@ const ProductCard = ({ product }: { product: any }) => {
 				<div className="flex-between gap-4">
 					<p>{product.rating} stars</p>
 					{product.stock > 0 ? (
-						<ProductPrice value={product.price} />
+						<ProductPrice value={Number(product.price)} />
 					) : (
 						<p className="text-destructive">Out of Stock</p>
 					)}

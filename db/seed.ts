@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/db/prisma";
 import sampleData from "./sample-data";
 
 async function main() {

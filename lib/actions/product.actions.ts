@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { LATEST_PRODUCTS_LIMIT } from "../constants";
-import { convertToPlainObject } from "../utils";
+import { convertToPlainObject, formatNumberWithDecimal } from "../utils";
 
 // Get latest products
 export async function getLatestProducts() {
@@ -8,12 +8,25 @@ export async function getLatestProducts() {
 		take: LATEST_PRODUCTS_LIMIT,
 		orderBy: { createdAt: "desc" },
 	});
-	return convertToPlainObject(data);
+
+	return data.map((product) => ({
+		...convertToPlainObject(product),
+		price: formatNumberWithDecimal(Number(product.price)),
+		rating: formatNumberWithDecimal(Number(product.rating)),
+	}));
 }
 
 // Get single product by it's slug
 export async function getProductBySlug(slug: string) {
-	return await prisma.product.findFirst({
+	const product = await prisma.product.findFirst({
 		where: { slug: slug },
 	});
+
+	if (!product) return null;
+
+	return {
+		...convertToPlainObject(product),
+		price: formatNumberWithDecimal(Number(product.price)),
+		rating: formatNumberWithDecimal(Number(product.rating)),
+	};
 }
